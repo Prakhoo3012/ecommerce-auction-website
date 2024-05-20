@@ -1,0 +1,57 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+
+    <div class="container mt-5">
+        
+        <form action="{% url 'added' %}" method="post" enctype="multipart/form-data" class="mx-auto card p-3 shadow-lg">
+            {% csrf_token %}
+            <h3>Add Item</h3>
+            <div class="form-group row mt-3">
+                <label for="inputtext" class="col-sm-2 col-form-label">Category</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="category">
+                        <option selected="selected" disabled>--select category--</option>
+                        {% for cats in cat %}
+                            <option>{{ cats.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+    
+            <div class="form-group row mt-3">
+                <label for="inputtext" class="col-sm-2 col-form-label">Product Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputtext" placeholder="Product Name" name="product_name">
+                </div>
+            </div>
+    
+            <div class="form-group row mt-3">
+                <label for="customFile" class="col-sm-2 col-form-label">Product Image</label>
+                <div class="col-sm-10">
+                    <input type="file" class="form-control" id="customFile" name="product_img" />
+                </div>
+            </div>
+    
+            <div class="form-group row mt-3">
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Starting price</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="inputEmail3" placeholder="0.00" name="starting_price">
+                </div>
+            </div>
+    
+            <div class="form-group row mt-3">
+                <label for="inputtext" class="col-sm-2 col-form-label">Product Description</label>
+                <div class="col-sm-10">
+                    <textarea  id="inputtext" cols="30" rows="10" class="form-control" placeholder="Enter product description" name="product_discription"></textarea>
+                </div>
+            </div>             
+            <button type="submit" class="btn btn-primary mt-3 mb-3" style="width: 200px; margin-left: 500px;">Add Item</button>
+                
+        </form>
+        
+    </div>
+
+    
+  
+{% endblock %}

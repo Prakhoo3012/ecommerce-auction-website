@@ -1,0 +1,129 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+
+{% if h == request.user %}
+  <div class="alert alert-danger mt-5 ms-5 me-5 mb-5" role="alert">  
+    Congratulations!! {{request.user}} you have won the bidding.
+  </div>
+{% endif %}
+
+{%if send%}
+<div class="alert alert-primary mt-5 ms-5 me-5 mb-5" role="alert">  
+  {{send}}
+</div>
+{% endif %}
+
+{%if msg %}
+<div class="alert alert-warning mt-5 ms-5 me-5 mb-5" role="alert">  
+  {{msg}}
+</div>
+{% endif %}
+
+<div class="w-100">
+    <div class="card mb-3 ms-3 mt-5">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="/media/{{item.image}}" class="img-fluid rounded-start mt-3 ms-3" alt="..." style="height: 500px;">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h3 class="card-title">Listing: {{item.name}}</h3>
+              <hr>
+              <h4>Details:</h4>
+              <p class="card-text">{{item.description}}</p>
+              <p class="card-text"><b>Starting price: $ {{item.price}}</b></p>
+              <p class="card-text"><small>Inclusive of all taxes</small></p>
+              <p class="card-text">Category: {{item.category}}</p>
+              <p class="card-text"><small class="text-body-secondary">Listed by: {{item.created_by}}</small></p>
+              <p class="card-text"><small class="text-body-secondary">created at: {{item.created_at}}</small></p>
+            </div>
+            <div class="card-footer bg-transparent me-2">
+            {% if user.is_authenticated %}
+              {% if b == False %}
+                <h3>Latest Bid is: $ {{ bid.bids }}</h3>
+                {% if message %}
+                <div class="alert alert-warning" role="alert">
+                  {{message}}
+                </div>
+                {% endif %}
+                <p class="text-success">Your bid is the current bid.</p>
+                <form action="" method="get">
+                    <!-- {% csrf_token %} -->
+                    <input type="number" placeholder="Enter you bid amount" class="form-control mt-2" name="bid"><br>
+                    <button class="btn btn-primary mb-3">Place Bid</button>
+                </form>
+                {% if check == True %}
+                  <a href="{% url 'remove' item.id %}" class="btn btn-warning mt-1">Remove from watchlist</a>
+                {% else %}
+                  <a href="{% url 'add_to_watchlist' item.id %}" class="btn btn-warning mt-1">Add to watchlist</a>
+                {% endif %}
+              {% endif %}
+            {% else %}
+                <p>You are not signed in. Please, signed in to add the item to your watchlist and to bid the product.<a href="{% url 'login' %}" class="btn btn-warning ms-2">Log In</a></p>
+            {% endif %}
+            <hr>
+        </div>
+        {% if box == True %}
+        <div class="card-footer"> 
+          <h3 class="font-monospace text-success">Current Highest bid: $ {{high.bids}}</h3>
+          <h3 class="font-monospace text-success">Current Highest bidder: {{high.bidder}}</h3>
+          <h4 class="font-monospace text-success">Do you want to sell it?</h4>
+          <form action="" method="get">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="radio" id="flexRadioDefault1" value="YES">
+                <label class="form-check-label" for="flexRadioDefault1">
+                  YES
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="radio" id="flexRadioDefault2" checked value="NO">
+                <label class="form-check-label" for="flexRadioDefault2">
+                  NO
+                </label>
+              </div>
+              <button class="btn btn-primary mt-3 mb-3">Sell</button>
+          </form>
+          <hr>
+        </div>
+        {% endif %}
+        <div class="card-footer"> 
+          <div class="form-outline mb-4">
+            <h3>Comments!</h3>
+            <form action="" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+                <input type="text" id="addANote" class="form-control mt-3" placeholder="Type comment..." name="comment" />
+                <button class="btn btn-secondary mt-3">+ Add a note</button>
+            </form>
+          </div>
+          {% if comments %}
+            {% for comment in comments %}
+              <div class="card mb-4">
+              <div class="card-body">
+                <p>{{comment.Comment}}</p>
+              
+                  <div class="d-flex justify-content-between">
+                  <div class="d-flex flex-row align-items-center">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(4).webp" alt="avatar" width="25"
+                    height="25" />
+                    <p class="small mb-0 ms-2"><b>{{comment.User}}</b></p>
+                  </div>
+                  <div class="d-flex flex-row align-items-center">
+                    <p class="small text-muted mb-0">Comment at: {{comment.comment_at}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% endif %}
+          <hr>
+        </div>
+      </div>
+          </div>
+        </div>
+      </div>
+</div>
+
+
+
+{% endblock %}

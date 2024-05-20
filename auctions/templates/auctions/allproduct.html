@@ -1,0 +1,74 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+{% if user.is_authenticated %}
+
+<div class="mt-5">
+  <div class="mx-auto col-6">
+      <form action="">
+          <div class="mb-3">
+              <div class="form-group">
+                  <label for="exampleInputEmail1" class="mt-1 fs-4" style="font-weight: bold;">Search Product</label>
+                  <select class="form-control mt-2" name="search_product">
+                    <option selected="selected" disabled>--select category--</option>
+                    {% for cats in cat %}
+                        <option>{{ cats.name }}</option>
+                    {% endfor %}
+                </select>
+              </div>
+              <button class="btn btn-primary mt-3 mb-4" type="submit">Search</button>
+          </div>
+      </form>   
+  </div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for item in items %}
+    <a href="{% url 'detail' item.id %}" style="text-decoration: none;">
+    <div class="col card shadow-lg ms-5 me-5 mt-5 ps-3 pe-3 pt-3 pb-3">
+      <div class="card h-100">
+        <img src="/media/{{item.image}}" class="card-img-top" alt="{{ item.name }}" style="height: 300px;">
+        <div class="card-body">
+          <h4 class="card-title">{{ item.name }}</h4>
+          <p class="card-text"><b>Starting Price: {{item.price}}</b></p>
+          <p class="card-text">{{item.description}}</p>
+            {% if item.is_sold == True %}
+            <h5 class="text-success bg-dark">Product sold to {{ item.sold_to }}</h5>
+            {% else %}
+            <h5 class="text-warning bg-dark">Not sold</h5>
+            {% endif %}
+            <p class="card-text"><b>Created by: {{item.created_by}}</b></p>
+          <p class="card-text"><small class="text-body-secondary">Last updated:  {{item.created_at}}</small></p>
+        </div>
+      </div>
+    </div>
+    </a>
+    {% endfor %}
+  </div>
+{% else %}
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  {% for item in items %}
+  <a href="{% url 'login' %}" style="text-decoration: none;">
+  <div class="col card shadow-lg ms-5 me-5 mt-5 ps-3 pe-3 pt-3 pb-3">
+    <div class="card h-100">
+      <img src="/media/{{item.image}}" class="card-img-top" alt="{{ item.name }}" style="height: 300px;">
+      <div class="card-body">
+        <h4 class="card-title">{{ item.name }}</h4>
+        <p class="card-text"><b>Starting Price: {{item.price}}</b></p>
+        <p class="card-text">{{item.description}}</p>
+        {% if item.is_sold == True %}
+            <h5 class="text-success bg-dark">Product sold</h5>
+            {% else %}
+            <h5 class="text-warning bg-dark">Not sold</h5>
+            {% endif %}
+        <p class="card-text"><small class="text-body-secondary">Last updated:  {{item.created_at}}</small></p>
+      </div>
+    </div>
+  </div>
+  </a>
+  {% endfor %}
+</div>
+{% endif %}
+
+
+{% endblock %}
